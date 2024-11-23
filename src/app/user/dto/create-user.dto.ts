@@ -1,7 +1,5 @@
-import { UserEntity } from '../entities/user.entity';
-
-export class CreateUserDto implements UserEntity {
-  id: string;
+export class CreateUserDto {
+  id?: string;
   name: string;
   email: string;
   password: string;
