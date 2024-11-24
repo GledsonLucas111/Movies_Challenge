@@ -36,18 +36,23 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       const createUserDto: CreateUserDto = {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        password: '123456',
+        name: 'Gledson',
+        email: 'Gledson1@example.com',
+        password: '123Gl@',
       };
-      const savedUser = { id: 1, ...createUserDto };
+      const savedUser: User = {
+        ...createUserDto,
+        id: '123456',
+      };
 
       mockUserRepository.create.mockReturnValue(createUserDto);
       mockUserRepository.save.mockResolvedValue(savedUser);
 
       const result = await userService.create(createUserDto);
 
-      expect(mockUserRepository.create).toHaveBeenCalledWith(createUserDto);
+      expect(mockUserRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining(createUserDto),
+      );
       expect(mockUserRepository.save).toHaveBeenCalledWith(createUserDto);
       expect(result).toEqual(savedUser);
     });
