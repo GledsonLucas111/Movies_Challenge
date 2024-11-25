@@ -13,8 +13,9 @@ describe('UserService', () => {
     create: jest.fn(),
     save: jest.fn(),
     createQueryBuilder: jest.fn().mockReturnThis(),
-    findOne: jest.fn(),
     find: jest.fn(),
+    findOne: jest.fn(),
+    remove: jest.fn(),
   };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -115,6 +116,59 @@ describe('UserService', () => {
       expect(mockUserRepository.findOne).toHaveBeenCalledWith({
         where: { id: userId },
       });
+    });
+  });
+  describe('Update', () => {
+    it('should update and return the updated user when a valid ID is provided', async () => {
+      const userId = '12345';
+      const updateUserDto = { email: 'newemail@gmail.com' };
+      const user: User = {
+        id: userId,
+        name: 'Gledson',
+        email: 'gledson@example.com',
+        password: '123456',
+      };
+      // busca pelo usuario
+      mockUserRepository.findOne.mockResolvedValue(user);
+
+      // salvemtno do usuario atualizado
+      const updateUser = { ...user, ...updateUserDto };
+      mockUserRepository.save.mockResolvedValue(updateUser);
+
+      const result = await userService.update(user.id, updateUserDto);
+
+      // verifica se o repositoria foi chamdado corretamente
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({
+        where: { id: user.id },
+      });
+      expect(mockUserRepository.save).toHaveBeenCalledWith(updateUser);
+
+      // veridica se o resultado do metodo esta correto
+      expect(result).toEqual(updateUser);
+    });
+  });
+  describe('Delete', () => {
+    it('should remove the user when a valid ID is provided', async () => {
+      const userId = '12345';
+      const user: User = {
+        id: userId,
+        name: 'Gledson',
+        email: 'gledson@example.com',
+        password: '123456',
+      };
+      // busca pelo usuario
+      mockUserRepository.findOne.mockResolvedValue(user);
+
+      // simula a exclusao bem sucedida
+      mockUserRepository.remove.mockResolvedValue(undefined);
+
+      await userService.remove(user.id);
+
+      // verifica se o repositoria foi chamdado corretamente
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({
+        where: { id: user.id },
+      });
+      expect(mockUserRepository.remove).toHaveBeenCalledWith(user);
     });
   });
 });
