@@ -12,6 +12,8 @@ describe('UserController', () => {
     create: jest.fn(),
     findAll: jest.fn(),
     findOne: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -50,7 +52,7 @@ describe('UserController', () => {
       expect(result).toEqual(savedUser);
     });
   });
-  describe('Find all users', () => {
+  describe('FindAll', () => {
     it('findAll should return a user list with success', async () => {
       const userList: User[] = [
         {
@@ -103,8 +105,42 @@ describe('UserController', () => {
       );
 
       expect(mockUserService.findOne).toHaveBeenCalledWith(userId);
+    });
+  });
+  describe('Update', () => {
+    it('should update and return the updated user when a valid ID is provided', async () => {
+      const userId = '12345';
+      const updateUserDto = { email: 'newemail@gmail.com' };
+      const updatedUser: User = {
+        id: userId,
+        name: 'Gledson',
+        email: 'gledson@example.com',
+        password: '123456',
+      };
 
-      expect(mockUserService.findOne).toHaveBeenCalledWith(userId);
+      mockUserService.update.mockResolvedValue(updatedUser);
+
+      const result = await controller.update(userId, updateUserDto);
+
+      expect(mockUserService.update).toHaveBeenLastCalledWith(
+        userId,
+        updateUserDto,
+      );
+
+      expect(result).toEqual(updatedUser);
+    });
+  });
+  describe('Delete', () => {
+    it('should remove a user when a valid ID is provided', async () => {
+      const userId = '12345';
+
+      mockUserService.remove.mockResolvedValue(undefined);
+
+      const result = await controller.remove(userId);
+
+      expect(mockUserService.remove).toHaveBeenCalledWith(userId);
+
+      expect(result).toBeUndefined();
     });
   });
 });
