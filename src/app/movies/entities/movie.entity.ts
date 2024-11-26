@@ -1,10 +1,10 @@
-import { Rental } from 'src/app/rentals/entities/rental.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Rental } from '../../rentals/entities/rental.entity';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('movies')
 export class Movie {
-  @PrimaryGeneratedColumn()
-  id: number | string;
+  @PrimaryColumn({ unique: true, type: 'bigint' })
+  id: number;
 
   @Column()
   title: string;

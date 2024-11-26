@@ -1,12 +1,20 @@
-import { Movie } from '../entities/movie.entity';
+import { IsString } from 'class-validator';
 
-export class CreateMovieDto implements Movie {
-  id: number | string;
+export class CreateMovieDto {
+  id: number;
+
+  @IsString()
   title: string;
+
+  @IsString()
   overview: string;
+
+  @IsString()
   vote_average: string;
+
+  @IsString()
   poster_path: string;
+
+  @IsString()
   release_date: Date;
-  stock: number;
-  state_conservation: string;
 }

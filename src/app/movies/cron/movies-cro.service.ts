@@ -1,6 +1,8 @@
 import { Cron } from '@nestjs/schedule';
 import { MoviesSyncService } from './movie-sync.service';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class MoviesCronService {
   constructor(private readonly moviesSyncService: MoviesSyncService) {}
 

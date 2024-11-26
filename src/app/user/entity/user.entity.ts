@@ -1,4 +1,4 @@
-import { Rental } from 'src/app/rentals/entities/rental.entity';
+import { Rental } from '../../rentals/entities/rental.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user' })
