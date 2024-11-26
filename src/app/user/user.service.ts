@@ -2,9 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { User } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
+import { EmailAlreadyExistsException } from '../../exceptions/email-already-exists.exception';
+import { PostgresErrorCode } from '../../utils/e-typeorm-error.util';
 
 @Injectable()
 export class UserService {
@@ -14,9 +16,16 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return await this.userRepository.save(
-      this.userRepository.create({ id: randomUUID(), ...createUserDto }),
-    );
+    try {
+      return await this.userRepository.save(
+        this.userRepository.create({ id: randomUUID(), ...createUserDto }),
+      );
+    } catch (error) {
+      if (error.code === PostgresErrorCode.UniqueViolation) {
+        throw new EmailAlreadyExistsException();
+      }
+      throw error;
+    }
   }
 
   async findAll(): Promise<User[]> {
