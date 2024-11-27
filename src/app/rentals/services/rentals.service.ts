@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRentalDto } from '../dto/create-rental.dto';
-import { UpdateRentalDto } from '../dto/update-rental.dto';
+import { Rental } from '../entities/rental.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class RentalsService {
-  create(createRentalDto: CreateRentalDto) {
-    return 'This action adds a new rental';
+  constructor(
+    @InjectRepository(Rental)
+    private readonly rantalsRepository: Repository<Rental>,
+  ) {}
+
+  async create(dto: CreateRentalDto) {
+    return await this.rantalsRepository.save(
+      this.rantalsRepository.create({ id: randomUUID(), ...dto }),
+    );
   }
 
-  findAll() {
-    return `This action returns all rentals`;
+  async findAll(): Promise<Rental[]> {
+    return await this.rantalsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} rental`;
-  }
-
-  update(id: number, updateRentalDto: UpdateRentalDto) {
-    return `This action updates a #${id} rental`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} rental`;
+  async findOne(id: string): Promise<Rental> {
+    return await this.rantalsRepository.findOne({ where: { id } });
   }
 }
