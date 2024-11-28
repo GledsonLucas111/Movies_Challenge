@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRentalDto } from '../dto/create-rental.dto';
 import { Rental } from '../entities/rental.entity';
 import { Repository } from 'typeorm';
@@ -54,11 +58,25 @@ export class RentalsService {
     return await this.rentalsRepository.save(rental);
   }
 
-  async findAll(): Promise<Rental[]> {
+  async finAll() {
     return await this.rentalsRepository.find();
   }
 
-  async findOne(id: number): Promise<Rental> {
-    return await this.rentalsRepository.findOne({ where: { id } });
+  async returnMovie(id: number) {
+    const rental = await this.rentalsRepository.findOne({ where: { id } });
+    const data = {
+      returnDate: new Date(),
+      isReturned: true,
+    };
+
+    // se nao encontrar o rental com o id passado eh dispardo um erro
+    if (!rental) {
+      throw new NotFoundException();
+    }
+    await this.movieRepository.update(rental.movieId, { isRented: false });
+
+    Object.assign(rental, data);
+
+    return await this.rentalsRepository.save(rental);
   }
 }

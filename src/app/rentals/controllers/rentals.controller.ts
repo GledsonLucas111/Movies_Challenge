@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Patch } from '@nestjs/common';
 import { RentalsService } from '../services/rentals.service';
 import { CreateRentalDto } from '../dto/create-rental.dto';
 
@@ -13,11 +13,11 @@ export class RentalsController {
 
   @Get()
   findAll() {
-    return this.rentalsService.findAll();
+    return this.rentalsService.finAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.rentalsService.findOne(+id);
+  @Patch(':id')
+  returnMovie(@Param(':id') id: number) {
+    return this.rentalsService.returnMovie(id);
   }
 }
