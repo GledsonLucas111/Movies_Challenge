@@ -7,8 +7,8 @@ export class RentalsController {
   constructor(private readonly rentalsService: RentalsService) {}
 
   @Post()
-  create(@Body() createRentalDto: CreateRentalDto) {
-    return this.rentalsService.create(createRentalDto);
+  rentMovie(@Body() createRentalDto: CreateRentalDto) {
+    return this.rentalsService.rentMovie(createRentalDto);
   }
 
   @Get()

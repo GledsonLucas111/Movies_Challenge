@@ -21,11 +21,11 @@ export class Rental {
   @JoinColumn({ name: 'movieId' })
   movie: Movie;
 
-  @Column()
-  userId: string; // Chave estrangeira para users.id
+  @Column({ nullable: false })
+  userId: number;
 
-  @Column()
-  movieId: string;
+  @Column({ nullable: false })
+  movieId: number;
 
   @Column()
   rentalDate: Date;

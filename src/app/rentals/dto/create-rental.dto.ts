@@ -1,9 +1,9 @@
-import { IsString } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class CreateRentalDto {
-  @IsString()
-  userId: string;
+  @IsNumber()
+  userId: number;
 
-  @IsString()
-  movieId: string;
+  @IsNumber()
+  movieId: number;
 }

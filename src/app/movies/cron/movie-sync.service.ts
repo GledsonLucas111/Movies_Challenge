@@ -26,6 +26,8 @@ export class MoviesSyncService {
         existingMovie.vote_average = movie.vote_average;
 
         await this.moviesRepository.save(existingMovie);
+      } else {
+        console.log('Nenhum filme novo para sincronizar.');
       }
     }
   }

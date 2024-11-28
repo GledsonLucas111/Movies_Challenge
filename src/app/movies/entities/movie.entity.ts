@@ -21,8 +21,8 @@ export class Movie {
   @Column()
   release_date: Date;
 
-  @Column()
-  stock: number;
+  @Column({ default: false })
+  isRented: boolean;
 
   @Column()
   state_conservation: string;

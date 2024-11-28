@@ -50,8 +50,8 @@ describe('MoviesService', () => {
       };
       const savedMovie: Movie = {
         ...createMovie,
-        stock: 2,
         state_conservation: 'novo',
+        isRented: false,
       };
 
       mockMovieRepository.create.mockReturnValue(createMovie);
@@ -77,7 +77,7 @@ describe('MoviesService', () => {
           vote_average: '1234',
           poster_path: 'path',
           release_date: undefined,
-          stock: 2,
+          isRented: false,
           state_conservation: 'novo',
         },
         {
@@ -88,7 +88,7 @@ describe('MoviesService', () => {
           vote_average: '1234',
           poster_path: 'path',
           release_date: undefined,
-          stock: 2,
+          isRented: false,
           state_conservation: 'usado',
         },
       ];
@@ -112,7 +112,7 @@ describe('MoviesService', () => {
         vote_average: '1234',
         poster_path: 'path',
         release_date: undefined,
-        stock: 2,
+        isRented: false,
         state_conservation: 'novo',
       };
 
@@ -138,7 +138,7 @@ describe('MoviesService', () => {
         vote_average: '1234',
         poster_path: 'path',
         release_date: undefined,
-        stock: 2,
+        isRented: false,
         state_conservation: 'novo',
       };
       // busca pelo usuario
@@ -171,7 +171,7 @@ describe('MoviesService', () => {
         vote_average: '1234',
         poster_path: 'path',
         release_date: undefined,
-        stock: 2,
+        isRented: false,
         state_conservation: 'novo',
       };
       // busca pelo usuario

@@ -13,10 +13,8 @@ export class MoviesService {
   ) {}
 
   async create(dto: CreateMovieDto) {
-    const state = ['novo', 'danificados', 'usado'];
-    const stock = [1, 2, 3, 4, 5];
+    const state = ['novo', 'danificado', 'usado'];
     const randomState = state[Math.floor(Math.random() * state.length)];
-    const randomStock = stock[Math.floor(Math.random() * stock.length)];
 
     const movie = {
       title: dto.title,
@@ -24,7 +22,6 @@ export class MoviesService {
       vote_average: dto.vote_average,
       poster_path: dto.poster_path,
       release_date: dto.release_date,
-      stock: randomStock,
       state_conservation: randomState,
     };
 
