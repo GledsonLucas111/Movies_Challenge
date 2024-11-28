@@ -1,8 +1,6 @@
 import { IsString } from 'class-validator';
 
 export class CreateMovieDto {
-  id: number;
-
   @IsString()
   title: string;
 

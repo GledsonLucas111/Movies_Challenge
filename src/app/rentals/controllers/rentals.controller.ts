@@ -17,7 +17,7 @@ export class RentalsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.rentalsService.findOne(id);
+  findOne(@Param('id') id: number) {
+    return this.rentalsService.findOne(+id);
   }
 }

@@ -3,7 +3,6 @@ import { MoviesService } from './movies.service';
 import { Movie } from '../entities/movie.entity';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateMovieDto } from '../dto/create-movie.dto';
 
 describe('MoviesService', () => {
   let service: MoviesService;
@@ -40,7 +39,7 @@ describe('MoviesService', () => {
 
   describe('create', () => {
     it('should create a new movie', async () => {
-      const createMovie: CreateMovieDto = {
+      const createMovie = {
         id: 12345,
         title: 'Homem de ferro',
         overview:

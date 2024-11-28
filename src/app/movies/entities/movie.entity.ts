@@ -1,9 +1,9 @@
 import { Rental } from '../../rentals/entities/rental.entity';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('movies')
 export class Movie {
-  @PrimaryColumn({ unique: true, type: 'bigint' })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

@@ -1,11 +1,17 @@
 import { User } from '../../user/entity/user.entity';
 import { Movie } from '../../movies/entities/movie.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('rentals')
 export class Rental {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @ManyToOne(() => User, (user) => user.rentals)
   @JoinColumn({ name: 'userId' })

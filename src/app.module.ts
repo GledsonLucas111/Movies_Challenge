@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from './app/user/entity/user.entity';
 import { MoviesModule } from './app/movies/movies.module';
 import { RentalsModule } from './app/rentals/rentals.module';
+import { AuthModule } from './app/auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RentalsModule } from './app/rentals/rentals.module';
     TypeOrmModule.forFeature([User]),
     MoviesModule,
     RentalsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [UserService],

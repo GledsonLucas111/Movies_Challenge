@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Movie } from '../entities/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateMovieDto } from '../dto/create-movie.dto';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class MoviesService {
@@ -18,10 +17,8 @@ export class MoviesService {
     const stock = [1, 2, 3, 4, 5];
     const randomState = state[Math.floor(Math.random() * state.length)];
     const randomStock = stock[Math.floor(Math.random() * stock.length)];
-    const movie: Movie = {
-      id: dto.id
-        ? dto.id
-        : parseInt(randomUUID().replace(/-/g, '').substring(0, 9), 16),
+
+    const movie = {
       title: dto.title,
       overview: dto.overview,
       vote_average: dto.vote_average,
@@ -30,7 +27,7 @@ export class MoviesService {
       stock: randomStock,
       state_conservation: randomState,
     };
-    console.log(randomStock);
+
     return await this.moviesRepository.save(
       this.moviesRepository.create(movie),
     );

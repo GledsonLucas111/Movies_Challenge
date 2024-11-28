@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { User } from '../entity/user.entity';
+import { User, UserRole } from '../entity/user.entity';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -43,7 +43,11 @@ describe('UserController', () => {
         email: 'Gledson@example.com',
         password: '12345',
       };
-      const savedUser: User = { id: '123456', ...createUserDto };
+      const savedUser: User = {
+        id: 123456,
+        ...createUserDto,
+        role: UserRole.USER,
+      };
 
       mockUserService.create.mockResolvedValue(savedUser);
       const result = await controller.create(createUserDto);
@@ -56,16 +60,18 @@ describe('UserController', () => {
     it('findAll should return a user list with success', async () => {
       const userList: User[] = [
         {
-          id: '12345',
+          id: 12345,
           name: 'Gledson',
           email: 'gledson@example.com',
           password: '123456',
+          role: UserRole.USER,
         },
         {
-          id: '1234',
+          id: 1234,
           name: 'Maria',
           email: 'maria@example.com',
           password: '123456',
+          role: UserRole.USER,
         },
       ];
       jest.spyOn(mockUserService, 'findAll').mockResolvedValue(userList);
@@ -79,12 +85,13 @@ describe('UserController', () => {
   });
   describe('FindOne', () => {
     it('should return a user list with success', async () => {
-      const userId = '12345';
+      const userId = 12345;
       const user: User = {
         id: userId,
         name: 'Gledson',
         email: 'gledson@example.com',
         password: '123456',
+        role: UserRole.USER,
       };
 
       mockUserService.findOne.mockResolvedValue(user);
@@ -96,7 +103,7 @@ describe('UserController', () => {
       expect(result).toEqual(user);
     });
     it('should throw an error when the user is not found', async () => {
-      const userId = '12345';
+      const userId = 12345;
 
       mockUserService.findOne.mockRejectedValue(new Error('User not found.'));
 
@@ -109,13 +116,14 @@ describe('UserController', () => {
   });
   describe('Update', () => {
     it('should update and return the updated user when a valid ID is provided', async () => {
-      const userId = '12345';
+      const userId = 12345;
       const updateUserDto = { email: 'newemail@gmail.com' };
       const updatedUser: User = {
         id: userId,
         name: 'Gledson',
         email: 'gledson@example.com',
         password: '123456',
+        role: UserRole.USER,
       };
 
       mockUserService.update.mockResolvedValue(updatedUser);
@@ -132,7 +140,7 @@ describe('UserController', () => {
   });
   describe('Delete', () => {
     it('should remove a user when a valid ID is provided', async () => {
-      const userId = '12345';
+      const userId = 12345;
 
       mockUserService.remove.mockResolvedValue(undefined);
 
