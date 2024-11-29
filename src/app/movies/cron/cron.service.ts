@@ -22,4 +22,10 @@ export class CronService {
     console.log('Verificando estoque...');
     await this.mailService.checkLowStock();
   }
+
+  @Cron(CronExpression.EVERY_10_SECONDS) // Executa a cada doze horas
+  async handleLateReturnMovie() {
+    console.log('Verificando data de devolucoes...');
+    await this.mailService.checkLateReturn();
+  }
 }

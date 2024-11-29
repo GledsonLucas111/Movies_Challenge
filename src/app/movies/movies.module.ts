@@ -1,7 +1,7 @@
 import { MoviesController } from './controllers/movies.controller';
 import { Movie } from './entities/movie.entity';
 
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from '../user/user.module';
@@ -12,12 +12,14 @@ import { MovieApiService } from './cron/movie-api.service';
 import { CronService } from './cron/cron.service';
 import { ConfigService } from '@nestjs/config';
 import { MailService } from './cron/mail.service';
+import { RentalsModule } from '../rentals/rentals.module';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([Movie]),
     UserModule,
+    forwardRef(() => RentalsModule),
   ],
   controllers: [MoviesController],
   providers: [
