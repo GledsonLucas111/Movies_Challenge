@@ -1,4 +1,5 @@
-import { IsEmail, IsString, Matches, MinLength } from 'class-validator';
+import { IsEmail, IsIn, IsString, Matches, MinLength } from 'class-validator';
+import { UserRole } from '../entity/user.entity';
 
 export class CreateUserDto {
   @IsString()
@@ -14,4 +15,7 @@ export class CreateUserDto {
     message: 'password must have letters, numbers and special characters',
   })
   password: string;
+
+  @IsIn(['admin', 'user'])
+  role: UserRole = UserRole.USER;
 }
