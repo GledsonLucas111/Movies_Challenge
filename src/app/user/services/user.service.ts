@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Repository } from 'typeorm';
-import { User } from '../entity/user.entity';
+import { User, UserRole } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailAlreadyExistsException } from '../../../exceptions/email-already-exists.exception';
 import { PostgresErrorCode } from '../../../utils/e-typeorm-error.util';
@@ -32,6 +32,10 @@ export class UserService {
   }
 
   async findAll(): Promise<User[]> {
+    const usersAdmin = await this.userRepository.find({
+      where: { role: UserRole.ADMIN },
+    });
+    console.log(usersAdmin);
     return await this.userRepository.find();
   }
 

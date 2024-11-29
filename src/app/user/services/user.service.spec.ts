@@ -43,10 +43,10 @@ describe('UserService', () => {
         name: 'Gledson',
         email: 'Gledson1@example.com',
         password: '123Gl@',
+        role: UserRole.USER,
       };
       const savedUser: User = {
         id: 123456,
-        role: UserRole.USER,
         ...createUserDto,
       };
 
