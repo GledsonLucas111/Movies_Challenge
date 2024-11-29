@@ -23,7 +23,7 @@ export class CronService {
     await this.mailService.checkLowStock();
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS) // Executa a cada doze horas
+  @Cron(CronExpression.EVERY_12_HOURS) // Executa a cada doze horas
   async handleLateReturnMovie() {
     console.log('Verificando data de devolucoes...');
     await this.mailService.checkLateReturn();

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -65,12 +69,21 @@ export class UserService {
   }
 
   async remove(id: number) {
-    const user: User = await this.findOne(id);
+    try {
+      const user: User = await this.findOne(id);
 
-    if (!user) {
-      throw new NotFoundException();
+      if (!user) {
+        throw new NotFoundException();
+      }
+
+      return await this.userRepository.remove(user);
+    } catch (error) {
+      if (error.code === '23503') {
+        throw new BadRequestException(
+          'Cannot delete user. There are rentals associated with this user.',
+        );
+      }
+      throw error;
     }
-
-    return await this.userRepository.remove(user);
   }
 }

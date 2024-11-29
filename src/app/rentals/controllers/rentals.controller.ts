@@ -20,4 +20,9 @@ export class RentalsController {
   returnMovie(@Param(':id') id: number) {
     return this.rentalsService.returnMovie(id);
   }
+
+  @Post()
+  reservationMovie(@Body() createRentalDto: CreateRentalDto) {
+    return this.rentalsService.reservationMovie(createRentalDto);
+  }
 }

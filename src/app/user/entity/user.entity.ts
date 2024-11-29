@@ -1,3 +1,4 @@
+import { Reservation } from 'src/app/reservation/entities/reservation.entity';
 import { Rental } from '../../rentals/entities/rental.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -28,4 +29,7 @@ export class User {
 
   @OneToMany(() => Rental, (rental) => rental.user)
   rentals?: Rental[];
+
+  @OneToMany(() => Reservation, (reservation) => reservation.user)
+  reservation?: Rental[];
 }

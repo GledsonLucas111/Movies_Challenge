@@ -1,5 +1,5 @@
-import { User } from '../../user/entity/user.entity';
-import { Movie } from '../../movies/entities/movie.entity';
+import { Movie } from 'src/app/movies/entities/movie.entity';
+import { User } from 'src/app/user/entity/user.entity';
 import {
   Column,
   Entity,
@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('rentals')
-export class Rental {
+@Entity('reservation')
+export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -27,18 +27,9 @@ export class Rental {
   @Column({ nullable: false })
   movieId: number;
 
-  @Column()
-  rentalDate: Date;
-
-  @Column({ nullable: true })
-  returnDate: Date;
+  @Column({ default: new Date() })
+  createdAt: Date;
 
   @Column({ default: false })
-  isReturned: boolean;
-
-  @Column({ type: 'text', array: true, default: null })
-  reservations?: string[];
-
-  @Column({ default: false })
-  notified?: boolean;
+  notified: boolean;
 }

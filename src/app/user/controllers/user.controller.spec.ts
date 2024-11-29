@@ -42,11 +42,11 @@ describe('UserController', () => {
         name: 'Gledson',
         email: 'Gledson@example.com',
         password: '12345',
+        role: UserRole.USER,
       };
       const savedUser: User = {
         id: 123456,
         ...createUserDto,
-        role: UserRole.USER,
       };
 
       mockUserService.create.mockResolvedValue(savedUser);

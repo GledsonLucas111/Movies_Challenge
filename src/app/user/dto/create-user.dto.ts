@@ -3,7 +3,9 @@ import { UserRole } from '../entity/user.entity';
 
 export class CreateUserDto {
   @IsString()
-  @Matches(/^[a-zA-Z]*$/, { message: 'name should only contain Letters ' })
+  @Matches(/^[a-zA-Z\s]*$/, {
+    message: 'name should only contain Letters ',
+  })
   name: string;
 
   @IsEmail()

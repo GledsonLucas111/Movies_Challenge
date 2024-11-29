@@ -79,4 +79,18 @@ export class RentalsService {
 
     return await this.rentalsRepository.save(rental);
   }
+
+  async reservationMovie(dto: CreateRentalDto) {
+    const movie = await this.movieRepository.findOne({
+      where: { id: dto.movieId },
+    });
+    if (!movie || movie.release_date <= new Date()) {
+      throw new BadRequestException('Cannot reserve released movies');
+    }
+
+    const existingReservation = await this.rentalsRepository.findOne({
+      where: { userId: dto.userId, movieId: dto.movieId },
+    });
+    console.log(existingReservation);
+  }
 }

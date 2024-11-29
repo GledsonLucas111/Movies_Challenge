@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { Repository } from 'typeorm';
 import { Movie } from '../entities/movie.entity';
@@ -55,12 +59,21 @@ export class MoviesService {
   }
 
   async remove(id: number) {
-    const movie = await this.findOne(id);
+    try {
+      const movie = await this.findOne(id);
 
-    if (!movie) {
-      throw new NotFoundException();
+      if (!movie) {
+        throw new NotFoundException();
+      }
+
+      return await this.moviesRepository.remove(movie);
+    } catch (error) {
+      if (error.code === '23503') {
+        throw new BadRequestException(
+          'Cannot delete movie. There are rentals associated with this movie.',
+        );
+      }
+      throw error;
     }
-
-    return await this.moviesRepository.remove(movie);
   }
 }

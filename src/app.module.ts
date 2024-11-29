@@ -9,6 +9,7 @@ import { JwtAuthGuard } from './app/auth/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ReservationModule } from './app/reservation/reservation.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     MoviesModule,
     RentalsModule,
     AuthModule,
+    ReservationModule,
   ],
   controllers: [],
   providers: [
