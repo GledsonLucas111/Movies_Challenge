@@ -4,10 +4,18 @@ import { ReservationController } from './controller/reservation.controller';
 import { MoviesModule } from '../movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reservation } from './entities/reservation.entity';
+import { NotifyService } from './cron/notify.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [MoviesModule, TypeOrmModule.forFeature([Reservation])],
+  imports: [
+    ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([Reservation]),
+    MoviesModule,
+    UserModule,
+  ],
   controllers: [ReservationController],
-  providers: [ReservationService],
+  providers: [ReservationService, NotifyService],
 })
 export class ReservationModule {}

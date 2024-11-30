@@ -4,7 +4,10 @@ import { LessThanOrEqual, Repository } from 'typeorm';
 import { Reservation } from '../entities/reservation.entity';
 import { User } from 'src/app/user/entity/user.entity';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class NotifyService {
   constructor(
     @InjectRepository(Movie)
@@ -16,6 +19,7 @@ export class NotifyService {
     private readonly mailerService: MailerService,
   ) {}
 
+  @Cron(CronExpression.EVERY_12_HOURS)
   async notifyUsersOfReleasedMovies() {
     const now = new Date();
     const releasedMovies = await this.movieRepository.find({
