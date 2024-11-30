@@ -41,4 +41,8 @@ export class ReservationService {
 
     return this.reservationRepository.save(reservation);
   }
+
+  async findAll() {
+    return await this.reservationRepository.find();
+  }
 }

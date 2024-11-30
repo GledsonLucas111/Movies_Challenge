@@ -40,6 +40,15 @@ export class RentalsService {
       throw new BadRequestException('Movie not found.');
     }
 
+    const releaseMovie = await this.movieRepository.findOne({
+      where: {
+        id: movieId,
+      },
+    });
+    if (releaseMovie.release_date > new Date()) {
+      throw new BadRequestException('Cannot reserve not released movies');
+    }
+
     // muda o status do filme de false para true
     await this.movieRepository.update(movieId, { isRented: true });
 
