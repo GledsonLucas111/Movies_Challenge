@@ -18,6 +18,10 @@ export class AuthService {
   async Login(email: string, password: string): Promise<UserToken> {
     const user = await this.validateUser(email, password);
 
+    if (!user) {
+      throw new Error('Invalid credentials'); // Lançando uma exceção caso o usuário não seja encontrado
+    }
+
     const payload: UserPayload = {
       username: email,
       sub: user.id,
@@ -25,7 +29,7 @@ export class AuthService {
     return { accessToken: this.jwtService.sign(payload) };
   }
 
-  private async validateUser(email: string, password: string) {
+  async validateUser(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
 
     if (user) {

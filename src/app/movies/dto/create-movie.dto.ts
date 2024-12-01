@@ -1,6 +1,10 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateMovieDto {
+  @IsNumber()
+  @IsOptional()
+  id: number;
+
   @IsString()
   title: string;
 

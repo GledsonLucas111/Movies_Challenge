@@ -18,7 +18,7 @@ export class ReservationService {
     private readonly movieRepository: Repository<Movie>,
   ) {}
 
-  async createReservation(dto: CreateReservationDto) {
+  async create(dto: CreateReservationDto) {
     const movie = await this.movieRepository.findOne({
       where: { id: dto.movieId },
     });

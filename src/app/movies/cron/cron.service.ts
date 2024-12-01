@@ -6,7 +6,7 @@ import { ExternalServices } from './external.service';
 export class CronService {
   constructor(private readonly externalService: ExternalServices) {}
 
-  @Cron('0 0 * * *') // Todo dia as 00:00
+  @Cron(CronExpression.EVERY_12_HOURS) // Todo dia as 00:00
   async handleCron() {
     console.log('Iniciando sincronização de filmes...');
     await this.externalService.syncMovies();

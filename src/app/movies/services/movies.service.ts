@@ -16,11 +16,18 @@ export class MoviesService {
     private readonly moviesRepository: Repository<Movie>,
   ) {}
 
-  async create(dto: CreateMovieDto) {
+  async create(dto: CreateMovieDto): Promise<Movie> {
     const state = ['novo', 'danificado', 'usado'];
     const randomState = state[Math.floor(Math.random() * state.length)];
 
+    if (dto.id) {
+      dto.id = dto.id;
+    } else {
+      dto.id = Date.now() + Math.floor(Math.random() * 100000);
+    }
+
     const movie = {
+      id: dto.id,
       title: dto.title,
       overview: dto.overview,
       vote_average: dto.vote_average,
@@ -28,6 +35,13 @@ export class MoviesService {
       release_date: dto.release_date,
       state_conservation: randomState,
     };
+
+    const movieExist = await this.moviesRepository.findOne({
+      where: { id: dto.id },
+    });
+    if (movieExist) {
+      throw new BadRequestException('Movie id already exists!');
+    }
 
     return await this.moviesRepository.save(
       this.moviesRepository.create(movie),

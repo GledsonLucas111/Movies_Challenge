@@ -1,10 +1,10 @@
 import { Reservation } from 'src/app/reservation/entities/reservation.entity';
 import { Rental } from '../../rentals/entities/rental.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('movies')
 export class Movie {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({ type: 'bigint' })
   id: number;
 
   @Column()

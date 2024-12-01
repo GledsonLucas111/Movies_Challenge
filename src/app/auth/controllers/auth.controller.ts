@@ -10,7 +10,7 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() { email, password }: LoginRequestBody) {
+  Login(@Body() { email, password }: LoginRequestBody) {
     return this.authService.Login(email, password);
   }
 }

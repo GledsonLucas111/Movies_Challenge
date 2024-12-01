@@ -4,6 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User, UserRole } from '../entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -42,26 +43,34 @@ describe('UserService', () => {
       const createUserDto: CreateUserDto = {
         name: 'Gledson',
         email: 'Gledson1@example.com',
-        password: '123Gl@',
+        password: '123567@',
         role: UserRole.USER,
       };
+
+      const hashedPassword: string =
+        '$2b$10$WICWKXglrexXHZJxbXNuquAC311J9fYEouuWBzr/MBtUtTsNLBz0O';
+
+      jest.spyOn(bcrypt, 'hash').mockImplementation(async () => hashedPassword);
+
       const savedUser: User = {
-        id: 123456,
         ...createUserDto,
+        id: 123456,
+        password: hashedPassword,
       };
 
-      mockUserRepository.create.mockReturnValue(createUserDto);
+      mockUserRepository.create.mockReturnValue(savedUser);
       mockUserRepository.save.mockResolvedValue(savedUser);
 
       const result = await userService.create(createUserDto);
 
-      expect(mockUserRepository.create).toHaveBeenCalledWith(
-        expect.objectContaining(createUserDto),
-      );
-      expect(mockUserRepository.save).toHaveBeenCalledWith(createUserDto);
+      expect(bcrypt.hash).toHaveBeenCalledWith('123567@', 10);
+
+      expect(mockUserRepository.save).toHaveBeenCalledWith(savedUser);
+
       expect(result).toEqual(savedUser);
     });
   });
+
   describe('findAll', () => {
     it('shoud return a user list with sucess', async () => {
       const userList: User[] = [
@@ -84,7 +93,6 @@ describe('UserService', () => {
       mockUserRepository.find.mockResolvedValue(userList);
 
       const result = await userService.findAll();
-
       expect(mockUserRepository.find).toHaveBeenCalledTimes(1);
       expect(result).toEqual(userList);
     });

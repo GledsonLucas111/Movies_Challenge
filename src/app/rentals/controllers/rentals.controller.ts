@@ -7,22 +7,17 @@ export class RentalsController {
   constructor(private readonly rentalsService: RentalsService) {}
 
   @Post()
-  rentMovie(@Body() createRentalDto: CreateRentalDto) {
-    return this.rentalsService.rentMovie(createRentalDto);
+  create(@Body() createRentalDto: CreateRentalDto) {
+    return this.rentalsService.create(createRentalDto);
   }
 
   @Get()
   findAll() {
-    return this.rentalsService.finAll();
+    return this.rentalsService.findAll();
   }
 
   @Patch(':id')
-  returnMovie(@Param(':id') id: number) {
-    return this.rentalsService.returnMovie(id);
-  }
-
-  @Post()
-  reservationMovie(@Body() createRentalDto: CreateRentalDto) {
-    return this.rentalsService.reservationMovie(createRentalDto);
+  update(@Param(':id') id: number) {
+    return this.rentalsService.update(id);
   }
 }

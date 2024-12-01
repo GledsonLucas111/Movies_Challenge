@@ -19,7 +19,7 @@ export class NotifyService {
     private readonly mailerService: MailerService,
   ) {}
 
-  @Cron(CronExpression.EVERY_12_HOURS)
+  @Cron(CronExpression.EVERY_5_SECONDS)
   async notifyUsersOfReleasedMovies() {
     const now = new Date();
     const releasedMovies = await this.movieRepository.find({

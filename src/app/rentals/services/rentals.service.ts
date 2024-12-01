@@ -14,12 +14,11 @@ export class RentalsService {
   constructor(
     @InjectRepository(Rental)
     private readonly rentalsRepository: Repository<Rental>,
-
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
   ) {}
 
-  async rentMovie(dto: CreateRentalDto) {
+  async create(dto: CreateRentalDto) {
     const { userId, movieId } = dto;
 
     // verifica quantos filmes o usuario ja alugou e nao devolveu
@@ -67,11 +66,11 @@ export class RentalsService {
     return await this.rentalsRepository.save(rental);
   }
 
-  async finAll() {
+  async findAll() {
     return await this.rentalsRepository.find();
   }
 
-  async returnMovie(id: number) {
+  async update(id: number) {
     const rental = await this.rentalsRepository.findOne({ where: { id } });
     const data = {
       returnDate: new Date(),
@@ -87,19 +86,5 @@ export class RentalsService {
     Object.assign(rental, data);
 
     return await this.rentalsRepository.save(rental);
-  }
-
-  async reservationMovie(dto: CreateRentalDto) {
-    const movie = await this.movieRepository.findOne({
-      where: { id: dto.movieId },
-    });
-    if (!movie || movie.release_date <= new Date()) {
-      throw new BadRequestException('Cannot reserve released movies');
-    }
-
-    const existingReservation = await this.rentalsRepository.findOne({
-      where: { userId: dto.userId, movieId: dto.movieId },
-    });
-    console.log(existingReservation);
   }
 }

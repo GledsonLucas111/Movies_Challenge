@@ -115,6 +115,7 @@ export class ExternalServices {
         existingMovie.vote_average = movie.vote_average;
 
         await this.moviesRepository.save(existingMovie);
+        console.log('Filmes sincronizados.');
       } else {
         console.log('Nenhum filme novo para sincronizar.');
       }

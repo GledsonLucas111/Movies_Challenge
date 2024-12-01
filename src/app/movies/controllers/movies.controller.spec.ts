@@ -45,16 +45,15 @@ describe('MoviesController', () => {
         vote_average: '1234',
         poster_path: 'path',
         release_date: undefined,
-        stock: 2,
         state_conservation: 'novo',
+        isRented: false,
       };
-      const savedMovie: Movie = { ...createMovie };
 
-      mockMovieRepository.create.mockResolvedValue(savedMovie);
+      mockMovieRepository.create.mockResolvedValue(createMovie);
       const result = await controller.create(createMovie);
 
       expect(mockMovieRepository.create).toHaveBeenCalledWith(createMovie);
-      expect(result).toEqual(savedMovie);
+      expect(result).toEqual(createMovie);
     });
   });
   describe('FindAll', () => {
@@ -68,8 +67,8 @@ describe('MoviesController', () => {
           vote_average: '1234',
           poster_path: 'path',
           release_date: undefined,
-          stock: 2,
           state_conservation: 'novo',
+          isRented: false,
         },
         {
           id: 12345,
@@ -79,8 +78,8 @@ describe('MoviesController', () => {
           vote_average: '1234',
           poster_path: 'path',
           release_date: undefined,
-          stock: 2,
           state_conservation: 'novo',
+          isRented: false,
         },
       ];
       jest.spyOn(mockMovieRepository, 'findAll').mockResolvedValue(movieList);
@@ -103,8 +102,8 @@ describe('MoviesController', () => {
         vote_average: '1234',
         poster_path: 'path',
         release_date: undefined,
-        stock: 2,
         state_conservation: 'novo',
+        isRented: false,
       };
 
       mockMovieRepository.findOne.mockResolvedValue(movie);
@@ -128,8 +127,8 @@ describe('MoviesController', () => {
         vote_average: '1234',
         poster_path: 'path',
         release_date: undefined,
-        stock: 2,
         state_conservation: 'novo',
+        isRented: false,
       };
 
       mockMovieRepository.update.mockResolvedValue(updatedMovie);

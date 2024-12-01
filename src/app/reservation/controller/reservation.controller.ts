@@ -8,7 +8,7 @@ export class ReservationController {
 
   @Post()
   create(@Body() createReservationDto: CreateReservationDto) {
-    return this.reservationService.createReservation(createReservationDto);
+    return this.reservationService.create(createReservationDto);
   }
 
   @Get()

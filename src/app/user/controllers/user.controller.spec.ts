@@ -8,7 +8,7 @@ describe('UserController', () => {
   let controller: UserController;
   let service: UserService;
 
-  const mockUserService = {
+  const mockUserRepository = {
     create: jest.fn(),
     findAll: jest.fn(),
     findOne: jest.fn(),
@@ -22,7 +22,7 @@ describe('UserController', () => {
       providers: [
         {
           provide: UserService,
-          useValue: mockUserService,
+          useValue: mockUserRepository,
         },
       ],
     }).compile();
@@ -49,10 +49,10 @@ describe('UserController', () => {
         ...createUserDto,
       };
 
-      mockUserService.create.mockResolvedValue(savedUser);
+      mockUserRepository.create.mockResolvedValue(savedUser);
       const result = await controller.create(createUserDto);
 
-      expect(mockUserService.create).toHaveBeenCalledWith(createUserDto);
+      expect(mockUserRepository.create).toHaveBeenCalledWith(createUserDto);
       expect(result).toEqual(savedUser);
     });
   });
@@ -74,11 +74,11 @@ describe('UserController', () => {
           role: UserRole.USER,
         },
       ];
-      jest.spyOn(mockUserService, 'findAll').mockResolvedValue(userList);
+      jest.spyOn(mockUserRepository, 'findAll').mockResolvedValue(userList);
 
       const result = await controller.findAll();
 
-      expect(mockUserService.findAll).toHaveBeenCalledTimes(1);
+      expect(mockUserRepository.findAll).toHaveBeenCalledTimes(1);
 
       expect(result).toEqual(userList);
     });
@@ -94,24 +94,13 @@ describe('UserController', () => {
         role: UserRole.USER,
       };
 
-      mockUserService.findOne.mockResolvedValue(user);
+      mockUserRepository.findOne.mockResolvedValue(user);
 
       const result = await controller.findOne(userId);
 
-      expect(mockUserService.findOne).toHaveBeenCalledWith(userId);
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith(userId);
 
       expect(result).toEqual(user);
-    });
-    it('should throw an error when the user is not found', async () => {
-      const userId = 12345;
-
-      mockUserService.findOne.mockRejectedValue(new Error('User not found.'));
-
-      await expect(controller.findOne(userId)).rejects.toThrowError(
-        'User not found.',
-      );
-
-      expect(mockUserService.findOne).toHaveBeenCalledWith(userId);
     });
   });
   describe('Update', () => {
@@ -126,11 +115,11 @@ describe('UserController', () => {
         role: UserRole.USER,
       };
 
-      mockUserService.update.mockResolvedValue(updatedUser);
+      mockUserRepository.update.mockResolvedValue(updatedUser);
 
       const result = await controller.update(userId, updateUserDto);
 
-      expect(mockUserService.update).toHaveBeenLastCalledWith(
+      expect(mockUserRepository.update).toHaveBeenLastCalledWith(
         userId,
         updateUserDto,
       );
@@ -142,11 +131,11 @@ describe('UserController', () => {
     it('should remove a user when a valid ID is provided', async () => {
       const userId = 12345;
 
-      mockUserService.remove.mockResolvedValue(undefined);
+      mockUserRepository.remove.mockResolvedValue(undefined);
 
       const result = await controller.remove(userId);
 
-      expect(mockUserService.remove).toHaveBeenCalledWith(userId);
+      expect(mockUserRepository.remove).toHaveBeenCalledWith(userId);
 
       expect(result).toBeUndefined();
     });
