@@ -21,6 +21,19 @@ describe('RentalsService', () => {
     findOne: jest.fn(),
     update: jest.fn(),
   };
+  // const queryRunnerMock = {
+  //   connect: jest.fn(),
+  //   startTransaction: jest.fn(),
+  //   commitTransaction: jest.fn(),
+  //   rollbackTransaction: jest.fn(),
+  //   release: jest.fn(),
+  //   query: jest.fn().mockResolvedValue('Mocked Query Result'),
+  //   manager: {
+  //     findOne: jest.fn(),
+  //     save: jest.fn(),
+  //     create: jest.fn(),
+  //   },
+  // };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
