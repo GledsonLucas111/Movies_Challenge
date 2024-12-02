@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RentalsService } from './rentals.service';
 import { Rental } from '../entities/rental.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Movie } from 'src/app/movies/entities/movie.entity';
 
@@ -21,19 +21,27 @@ describe('RentalsService', () => {
     findOne: jest.fn(),
     update: jest.fn(),
   };
-  // const queryRunnerMock = {
-  //   connect: jest.fn(),
-  //   startTransaction: jest.fn(),
-  //   commitTransaction: jest.fn(),
-  //   rollbackTransaction: jest.fn(),
-  //   release: jest.fn(),
-  //   query: jest.fn().mockResolvedValue('Mocked Query Result'),
-  //   manager: {
-  //     findOne: jest.fn(),
-  //     save: jest.fn(),
-  //     create: jest.fn(),
-  //   },
-  // };
+  const mockeDataSource = {
+    createQueryRunner: jest.fn().mockReturnValue({
+      connect: jest.fn(),
+      startTransaction: jest.fn(),
+      commitTransaction: jest.fn(),
+      rollbackTransaction: jest.fn(),
+      release: jest.fn(),
+      manager: {
+        findOne: jest.fn().mockImplementation((entity, options) => {
+          if (entity === Movie) {
+            return Promise.resolve({
+              id: options?.where?.id,
+              title: 'Future Movie',
+              release_date: new Date(Date.now() + 1000 * 60 * 60 * 24), // Data futura
+            });
+          }
+          return null;
+        }),
+      },
+    }),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -47,6 +55,10 @@ describe('RentalsService', () => {
         {
           provide: getRepositoryToken(Movie),
           useValue: mockMovieRepository,
+        },
+        {
+          provide: DataSource,
+          useValue: mockeDataSource,
         },
       ],
     }).compile();
