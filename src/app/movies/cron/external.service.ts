@@ -6,7 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 
 import axios from 'axios';
 
@@ -20,6 +20,7 @@ export class ExternalServices {
     private readonly moviesRepository: Repository<Movie>,
     private readonly mailerService: MailerService,
     private configService: ConfigService,
+    private dataSource: DataSource,
   ) {}
   private readonly apiUrl = this.configService.get<string>('API_BASE_URL');
   private readonly apiKey = this.configService.get<string>('API_KEY');
@@ -102,23 +103,36 @@ export class ExternalServices {
 
   // Sync Service
   async syncMovies(): Promise<void> {
-    const movies = await this.fetchMovies();
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
-    for (const movie of movies) {
-      const existingMovie = await this.moviesRepository.findOne({
-        where: { id: movie.id },
-      });
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-      if (existingMovie) {
-        // atualiza de acordo com as atualizacoes da API de filmes
-        existingMovie.overview = movie.overview;
-        existingMovie.vote_average = movie.vote_average;
+    try {
+      const movies = await this.fetchMovies();
 
-        await this.moviesRepository.save(existingMovie);
-        console.log('Filmes sincronizados.');
-      } else {
-        console.log('Nenhum filme novo para sincronizar.');
+      for (const movie of movies) {
+        const existingMovie = await queryRunner.manager.findOne(Movie, {
+          where: { id: movie.id },
+        });
+
+        if (existingMovie) {
+          // atualiza de acordo com as atualizacoes da API de filmes
+          existingMovie.overview = movie.overview;
+          existingMovie.vote_average = movie.vote_average;
+
+          await queryRunner.manager.save(existingMovie);
+          console.log('Filmes sincronizados.');
+        } else {
+          console.log('Nenhum filme novo para sincronizar.');
+        }
+        await queryRunner.commitTransaction();
       }
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
   }
 }
