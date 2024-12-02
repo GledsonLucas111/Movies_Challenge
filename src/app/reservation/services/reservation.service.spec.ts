@@ -2,13 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationService } from './reservation.service';
 import { Reservation } from '../entities/reservation.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateReservationDto } from '../dto/create-reservation.dto';
 import { Movie } from 'src/app/movies/entities/movie.entity';
 
 describe('ReservationService', () => {
   let service: ReservationService;
   let reservationRepository: Repository<Reservation>;
+  let dataSourceMock: Partial<DataSource>;
 
   const mockReservationRepository = {
     create: jest.fn(),
@@ -21,6 +22,27 @@ describe('ReservationService', () => {
   };
 
   beforeEach(async () => {
+    dataSourceMock = {
+      createQueryRunner: jest.fn().mockReturnValue({
+        connect: jest.fn(),
+        startTransaction: jest.fn(),
+        commitTransaction: jest.fn(),
+        rollbackTransaction: jest.fn(),
+        release: jest.fn(),
+        manager: {
+          findOne: jest.fn().mockImplementation((entity, options) => {
+            if (entity === Movie) {
+              return Promise.resolve({
+                id: options?.where?.id,
+                title: 'Future Movie',
+                release_date: new Date(Date.now() + 1000 * 60 * 60 * 24), // Data futura
+              });
+            }
+            return null;
+          }),
+        },
+      }),
+    };
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
       providers: [
@@ -32,6 +54,10 @@ describe('ReservationService', () => {
         {
           provide: getRepositoryToken(Movie),
           useValue: mockMovieRepository,
+        },
+        {
+          provide: DataSource,
+          useValue: dataSourceMock,
         },
       ],
     }).compile();

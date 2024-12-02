@@ -55,7 +55,7 @@ export class MoviesService {
     const movie: Movie = await this.moviesRepository.findOne({ where: { id } });
 
     if (!movie) {
-      throw new Error('Movie not found.');
+      throw new BadRequestException('Movie not found.');
     }
 
     return movie;

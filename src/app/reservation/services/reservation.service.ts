@@ -26,6 +26,7 @@ export class ReservationService {
     await queryRunner.startTransaction();
 
     try {
+      // Verifica se o filme existe e se a data de lançamento é válida
       const movie = await queryRunner.manager.findOne(Movie, {
         where: { id: dto.movieId },
       });
@@ -33,6 +34,7 @@ export class ReservationService {
         throw new BadRequestException('Cannot reserve released movies');
       }
 
+      // Verifica se já existe uma reserva para este filme e usuário
       const existingReservation = await queryRunner.manager.findOne(
         Reservation,
         {
@@ -44,20 +46,29 @@ export class ReservationService {
         throw new ConflictException('Reservation already exists');
       }
 
-      const reservation = queryRunner.manager.create(Reservation, {
+      // Obtem o repositório da entidade Reservation
+      const reservationRepository =
+        queryRunner.manager.getRepository(Reservation);
+
+      // Cria a nova reserva usando o repositório
+      const reservation = reservationRepository.create({
         userId: dto.userId,
         movieId: dto.movieId,
       });
 
-      const result = await queryRunner.manager.save(reservation);
+      // Salva a nova reserva no banco de dados
+      const result = await reservationRepository.save(reservation);
 
+      // Commit da transação
       await queryRunner.commitTransaction();
 
       return result;
     } catch (error) {
+      // Rollback da transação em caso de erro
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
+      // Libera o QueryRunner
       await queryRunner.release();
     }
   }
