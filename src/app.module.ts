@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './app/auth/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { redisStore } from 'cache-manager-redis-store';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { AppDataSource } from './data-source';
 
 @Module({
   imports: [
@@ -26,14 +27,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
     ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: `${process.env.DB_PASSWORD}`,
-      database: process.env.DB_DATABASE,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      ...AppDataSource.options, // configurações definidas no data-source
     }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
