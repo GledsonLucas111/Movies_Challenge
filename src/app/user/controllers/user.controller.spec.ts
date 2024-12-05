@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { User, UserRole } from '../entity/user.entity';
+import { User, UserRole } from '../entities/user.entity';
 
 describe('UserController', () => {
   let controller: UserController;

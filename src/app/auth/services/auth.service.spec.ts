@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { User, UserRole } from 'src/app/user/entity/user.entity';
+import { User, UserRole } from 'src/app/user/entities/user.entity';
 import { UserPayload } from '../model/UserPayload';
 import { UserService } from 'src/app/user/services/user.service';
 

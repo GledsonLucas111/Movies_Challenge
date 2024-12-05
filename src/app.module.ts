@@ -5,16 +5,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MoviesModule } from './app/movies/movies.module';
 import { RentalsModule } from './app/rentals/rentals.module';
 import { AuthModule } from './app/auth/auth.module';
-import { CacheModule, CacheModuleOptions } from '@nestjs/cache-manager';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ReservationModule } from './app/reservation/reservation.module';
 
 import { JwtAuthGuard } from './app/auth/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { redisStore } from 'cache-manager-redis-store';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { AppDataSource } from './data-source';
+import { AppDataSource } from 'db/data-source';
 
 @Module({
   imports: [
@@ -44,18 +42,6 @@ import { AppDataSource } from './data-source';
         defaults: {
           from: '"No Reply" <no-reply@example.com>',
         },
-      }),
-    }),
-    CacheModule.registerAsync<CacheModuleOptions>({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        store: await redisStore({
-          socket: {
-            host: configService.get<string>('REDIS_HOST', 'localhost'),
-            port: configService.get<number>('REDIS_PORT', 6379),
-          },
-          ttl: configService.get<number>('REDIS_TTL', 600), // tempo de vida do cache
-        }),
       }),
     }),
     UserModule,

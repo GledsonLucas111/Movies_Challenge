@@ -1,5 +1,5 @@
 import { Rental } from 'src/app/rentals/entities/rental.entity';
-import { User, UserRole } from 'src/app/user/entity/user.entity';
+import { User, UserRole } from 'src/app/user/entities/user.entity';
 import { Movie } from '../entities/movie.entity';
 
 import { MailerService } from '@nestjs-modules/mailer';

@@ -1,5 +1,5 @@
+import { Rental } from 'src/app/rentals/entities/rental.entity';
 import { Reservation } from 'src/app/reservation/entities/reservation.entity';
-import { Rental } from '../../rentals/entities/rental.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('movies')
@@ -17,7 +17,7 @@ export class Movie {
   vote_average: string;
 
   @Column()
-  poster_path: string;
+  poster_path?: string;
 
   @Column()
   release_date: Date;

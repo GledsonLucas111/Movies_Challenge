@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserPayload } from '../model/UserPayload';
 
 import { JwtService } from '@nestjs/jwt';
@@ -18,10 +18,6 @@ export class AuthService {
   async Login(email: string, password: string): Promise<UserToken> {
     const user = await this.validateUser(email, password);
 
-    if (!user) {
-      throw new Error('Invalid credentials'); // Lançando uma exceção caso o usuário não seja encontrado
-    }
-
     const payload: UserPayload = {
       username: email,
       sub: user.id,
@@ -39,6 +35,8 @@ export class AuthService {
           ...user,
         };
       }
+    } else {
+      throw new BadRequestException('Invalid credentials');
     }
     throw new Error('Email address or password provided is incorrect.');
   }

@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from 'src/app/movies/entities/movie.entity';
 import { LessThanOrEqual, Repository } from 'typeorm';
 import { Reservation } from '../entities/reservation.entity';
-import { User } from 'src/app/user/entity/user.entity';
+import { User } from 'src/app/user/entities/user.entity';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Injectable } from '@nestjs/common';
