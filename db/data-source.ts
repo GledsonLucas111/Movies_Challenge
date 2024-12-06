@@ -1,9 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
-import { Movie } from 'src/app/movies/entities/movie.entity';
-import { Rental } from 'src/app/rentals/entities/rental.entity';
-import { Reservation } from 'src/app/reservation/entities/reservation.entity';
-import { User } from 'src/app/user/entities/user.entity';
+// import { Movie } from 'src/app/movies/entities/movie.entity';
+// import { Rental } from 'src/app/rentals/entities/rental.entity';
+// import { Reservation } from 'src/app/reservation/entities/reservation.entity';
+// import { User } from 'src/app/user/entities/user.entity';
 import { DataSource } from 'typeorm';
 
 config();
@@ -17,7 +17,6 @@ export const AppDataSource = new DataSource({
   username: configService.getOrThrow('DB_USERNAME'),
   password: configService.getOrThrow('DB_PASSWORD'),
   database: configService.getOrThrow('DB_DATABASE'),
-  synchronize: true,
-  migrations: ['./migrations'],
-  entities: [User, Movie, Rental, Reservation],
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  migrations: ['dist/db/migration/*.js'],
 });
